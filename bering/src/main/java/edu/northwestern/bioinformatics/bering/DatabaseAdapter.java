@@ -17,7 +17,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.sql.Statement;
-import java.sql.DatabaseMetaData;
 import java.util.List;
 
 /**
@@ -27,15 +26,11 @@ public class DatabaseAdapter implements Adapter {
     private static final Log log = LogFactory.getLog(DatabaseAdapter.class);
 
     public static final String VERSION_TABLE_NAME = "bering_version";
-    private static final String RELEASE_COLUMN_NAME = "release";
-    private static final String MIGRATION_COLUMN_NAME = "migration";
+    public static final String RELEASE_COLUMN_NAME = "release_num";
+    public static final String MIGRATION_COLUMN_NAME = "migration";
 
-    private static final TableDefinition VERSION_TABLE = new TableDefinition(VERSION_TABLE_NAME);
     static {
         // TODO: these columns should be non-null
-        VERSION_TABLE.addColumn(RELEASE_COLUMN_NAME, "integer");
-        VERSION_TABLE.addColumn(MIGRATION_COLUMN_NAME, "integer");
-        VERSION_TABLE.setIncludePrimaryKey(false);
     }
 
     private Connection connection;
@@ -43,15 +38,29 @@ public class DatabaseAdapter implements Adapter {
     private JdbcTemplate jdbc;
     private SingleConnectionDataSource dataSource;
     private Dialect dialect;
+	private TableDefinition versionTable;
 
-    public DatabaseAdapter(Connection connection, Dialect dialect) {
-        this.connection = connection;
-        this.dataSource = new SingleConnectionDataSource(connection, true);
-        this.jdbc = new JdbcTemplate(dataSource);
-        this.dialect = dialect == null ? guessDialect() : dialect;
+	public DatabaseAdapter(Connection connection, Dialect dialect) {
+	    this(connection, dialect, VERSION_TABLE_NAME);
     }
 
-    private Dialect guessDialect() {
+	public DatabaseAdapter(Connection connection, Dialect dialect, String versionTable) {
+		this.connection = connection;
+		this.dataSource = new SingleConnectionDataSource(connection, true);
+		this.jdbc = new JdbcTemplate(dataSource);
+		this.dialect = dialect == null ? guessDialect() : dialect;
+		this.versionTable = createVersionTableDefinition(versionTable == null ? VERSION_TABLE_NAME : versionTable);
+	}
+
+	private TableDefinition createVersionTableDefinition(final String versionTableName) {
+		TableDefinition versionTable = new TableDefinition(versionTableName);
+		versionTable.addColumn(RELEASE_COLUMN_NAME, "integer");
+		versionTable.addColumn(MIGRATION_COLUMN_NAME, "integer");
+		versionTable.setIncludePrimaryKey(false);
+		return versionTable;
+	}
+
+	private Dialect guessDialect() {
         return (Dialect) jdbc.execute(new ConnectionCallback() {
             public Object doInConnection(Connection connection) throws SQLException, DataAccessException {
                 return DialectFactory.guessDialect(connection.getMetaData().getDatabaseProductName());
@@ -161,10 +170,10 @@ public class DatabaseAdapter implements Adapter {
             beginTransaction();
             savepoint = connection.setSavepoint("versiontabledetect");
             jdbc.query(String.format(
-                "SELECT %s, %s FROM %s", RELEASE_COLUMN_NAME, MIGRATION_COLUMN_NAME, VERSION_TABLE_NAME),
+                "SELECT %s, %s FROM %s", RELEASE_COLUMN_NAME, MIGRATION_COLUMN_NAME, versionTable.getName()),
                 (Object[]) null, new ResultSetExtractor() {
                     public Object extractData(ResultSet rs) throws SQLException, DataAccessException {
-                        log.debug(VERSION_TABLE_NAME + " table exists; reading current rows");
+                        log.debug(versionTable.getName() + " table exists; reading current rows");
                         while (rs.next()) {
                             version.updateRelease(
                                 rs.getInt(RELEASE_COLUMN_NAME),
@@ -176,14 +185,14 @@ public class DatabaseAdapter implements Adapter {
             );
             return version;
         } catch (Exception e) {
-            log.debug("Assuming " + VERSION_TABLE_NAME + " does not exist due to exception", e);
+            log.debug("Assuming " + versionTable.getName() + " does not exist due to exception", e);
             try {
                 if (savepoint != null) connection.rollback(savepoint);
             } catch (SQLException rollbackE) {
-                throw new RuntimeException(VERSION_TABLE_NAME + " does not exist and an attempt to create it has failed", rollbackE);
+                throw new RuntimeException(versionTable.getName() + " does not exist and an attempt to create it has failed", rollbackE);
             }
-            log.info("Creating " + VERSION_TABLE_NAME + " table");
-            createTable(VERSION_TABLE);
+            log.info("Creating " + versionTable.getName() + " table");
+            createTable(versionTable);
             commit();
             return new Version();
         } finally {
@@ -193,11 +202,15 @@ public class DatabaseAdapter implements Adapter {
 
     public void updateVersion(Integer release, Integer migration) {
         execute(String.format("DELETE FROM %s WHERE %s = %d",
-            VERSION_TABLE_NAME, RELEASE_COLUMN_NAME, release));
+            versionTable.getName(), RELEASE_COLUMN_NAME, release));
 
         if (migration < 1) return;
 
         execute(String.format("INSERT INTO %s (%s, %s) VALUES (%d, %d)",
-            VERSION_TABLE_NAME, RELEASE_COLUMN_NAME, MIGRATION_COLUMN_NAME, release, migration));
+            versionTable.getName(), RELEASE_COLUMN_NAME, MIGRATION_COLUMN_NAME, release, migration));
     }
+
+	public JdbcTemplate getJdbcTemplate() {
+		return jdbc;
+	}
 }

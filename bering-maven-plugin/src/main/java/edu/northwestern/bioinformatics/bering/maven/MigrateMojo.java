@@ -88,7 +88,12 @@ public class MigrateMojo extends AbstractBeringMojo {
      */
     private String password;
 
-    private DataSource createDataSource() throws MojoExecutionException {
+	/**
+	 * @parameter
+	 */
+	private String versionTable;
+
+	private DataSource createDataSource() throws MojoExecutionException {
         if (dataSourceProvider != null) {
             return getDataSourceFromProvider();
         } else {
@@ -130,19 +135,25 @@ public class MigrateMojo extends AbstractBeringMojo {
 
     @Override
     protected void executeInternal() throws MojoExecutionException, MojoFailureException {
-        try {
-            MojoCallbacks callbacks = new MojoCallbacks(basedir, createDataSource());
-            MigrateTaskHelper helper = createHelper(callbacks);
-            helper.setMigrationsDir(getMigrationsDir());
-            helper.setTargetVersion(targetVersion);
-            helper.setDialectName(dialect);
-            helper.execute();
-        } catch (BeringException e) {
-            throw new MojoExecutionException(e.getMessage(), e);
-        }
+	    getLog().info("Running migrations in " + getMigrationsDir() + " on " + versionTable);
+	    runMigrations(getMigrationsDir(), targetVersion, versionTable);
     }
 
-    protected MigrateTaskHelper createHelper(MojoCallbacks callbacks) {
+	protected void runMigrations(final String migrationsDir, final String targetVersion, final String versionTable) throws MojoExecutionException {
+		try {
+		    MojoCallbacks callbacks = new MojoCallbacks(basedir, createDataSource());
+		    MigrateTaskHelper helper = createHelper(callbacks);
+		    helper.setMigrationsDir(migrationsDir);
+		    helper.setTargetVersion(targetVersion);
+		    helper.setDialectName(dialect);
+			helper.setVersionTable(versionTable);
+		    helper.execute();
+		} catch (BeringException e) {
+		    throw new MojoExecutionException(e.getMessage(), e);
+		}
+	}
+
+	protected MigrateTaskHelper createHelper(MojoCallbacks callbacks) {
         return new MigrateTaskHelper(callbacks);
     }
 
@@ -219,4 +230,12 @@ public class MigrateMojo extends AbstractBeringMojo {
     public void setDataSourceProviderProperties(Properties properties) {
         this.dataSourceProviderProperties = properties;
     }
+
+	public String getVersionTable() {
+		return versionTable;
+	}
+
+	public void setVersionTable(String versionTable) {
+		this.versionTable = versionTable;
+	}
 }

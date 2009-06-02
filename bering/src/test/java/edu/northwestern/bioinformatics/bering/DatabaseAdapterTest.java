@@ -1,6 +1,9 @@
 package edu.northwestern.bioinformatics.bering;
 
 import static edu.northwestern.bioinformatics.bering.DatabaseAdapter.VERSION_TABLE_NAME;
+import static edu.northwestern.bioinformatics.bering.DatabaseAdapter.RELEASE_COLUMN_NAME;
+import static edu.northwestern.bioinformatics.bering.DatabaseAdapter.MIGRATION_COLUMN_NAME;
+
 import edu.northwestern.bioinformatics.bering.dialect.Hsqldb;
 import edu.northwestern.bioinformatics.bering.runtime.Version;
 import junit.framework.TestCase;
@@ -177,15 +180,15 @@ public class DatabaseAdapterTest extends TestCase {
     }
 
     public void testLoadVersionTable() throws Exception {
-        stmt.execute("CREATE TABLE " + VERSION_TABLE_NAME + " (release INTEGER NOT NULL, migration INTEGER NOT NULL)");
+        stmt.execute("CREATE TABLE " + VERSION_TABLE_NAME + " (" + RELEASE_COLUMN_NAME + " INTEGER NOT NULL, " + MIGRATION_COLUMN_NAME + " INTEGER NOT NULL)");
         stmt.execute("INSERT INTO " + VERSION_TABLE_NAME
-            + " (release, migration) VALUES (1, 5)");
+            + " (" + RELEASE_COLUMN_NAME + ", " + MIGRATION_COLUMN_NAME + ") VALUES (1, 5)");
         stmt.execute("INSERT INTO " + VERSION_TABLE_NAME
-            + " (release, migration) VALUES (2, 2)");
+            + " (" + RELEASE_COLUMN_NAME + ", " + MIGRATION_COLUMN_NAME + ") VALUES (2, 2)");
         stmt.execute("INSERT INTO " + VERSION_TABLE_NAME
-            + " (release, migration) VALUES (4, 6)");
+            + " (" + RELEASE_COLUMN_NAME + ", " + MIGRATION_COLUMN_NAME + ") VALUES (4, 6)");
         stmt.execute("INSERT INTO " + VERSION_TABLE_NAME
-            + " (release, migration) VALUES (7, 1)");
+            + " (" + RELEASE_COLUMN_NAME + ", " + MIGRATION_COLUMN_NAME + ") VALUES (7, 1)");
 
         Version actual = adapter.loadVersions();
         assertEquals("Wrong number of versions found", 4, actual.getReleaseNumbers().size());
@@ -196,40 +199,40 @@ public class DatabaseAdapterTest extends TestCase {
     }
 
     public void testUpdateVersionTableWithNoPreviousVersion() throws Exception {
-        stmt.execute("CREATE TABLE " + VERSION_TABLE_NAME + " (release INTEGER NOT NULL, migration INTEGER NOT NULL)");
+        stmt.execute("CREATE TABLE " + VERSION_TABLE_NAME + " (" + RELEASE_COLUMN_NAME + " INTEGER NOT NULL, " + MIGRATION_COLUMN_NAME + " INTEGER NOT NULL)");
 
         adapter.updateVersion(2, 4);
-        ResultSet rs = stmt.executeQuery("SELECT release, migration FROM " + VERSION_TABLE_NAME + " WHERE release=2");
+        ResultSet rs = stmt.executeQuery("SELECT " + RELEASE_COLUMN_NAME + ", " + MIGRATION_COLUMN_NAME + " FROM " + VERSION_TABLE_NAME + " WHERE " + RELEASE_COLUMN_NAME + "=2");
         boolean any = false;
         while (rs.next()) {
             any = true;
-            assertEquals(2, rs.getInt("release"));
-            assertEquals(4, rs.getInt("migration"));
+            assertEquals(2, rs.getInt(RELEASE_COLUMN_NAME));
+            assertEquals(4, rs.getInt(MIGRATION_COLUMN_NAME));
         }
         assertTrue("Result not stored", any);
     }
 
     public void testUpdateVersionTableWithPreviousVersion() throws Exception {
-        stmt.execute("CREATE TABLE " + VERSION_TABLE_NAME + " (release INTEGER NOT NULL, migration INTEGER NOT NULL)");
-        stmt.execute("INSERT INTO " + VERSION_TABLE_NAME + "(release, migration) VALUES (3, 7)");
+        stmt.execute("CREATE TABLE " + VERSION_TABLE_NAME + " (" + RELEASE_COLUMN_NAME + " INTEGER NOT NULL, " + MIGRATION_COLUMN_NAME + " INTEGER NOT NULL)");
+        stmt.execute("INSERT INTO " + VERSION_TABLE_NAME + "(" + RELEASE_COLUMN_NAME + ", " + MIGRATION_COLUMN_NAME + ") VALUES (3, 7)");
 
         adapter.updateVersion(3, 2);
-        ResultSet rs = stmt.executeQuery("SELECT release, migration FROM " + VERSION_TABLE_NAME + " WHERE release=3");
+        ResultSet rs = stmt.executeQuery("SELECT " + RELEASE_COLUMN_NAME + ", " + MIGRATION_COLUMN_NAME + " FROM " + VERSION_TABLE_NAME + " WHERE " + RELEASE_COLUMN_NAME + "=3");
         boolean any = false;
         while (rs.next()) {
             any = true;
-            assertEquals(3, rs.getInt("release"));
-            assertEquals(2, rs.getInt("migration"));
+            assertEquals(3, rs.getInt(RELEASE_COLUMN_NAME));
+            assertEquals(2, rs.getInt(MIGRATION_COLUMN_NAME));
         }
         assertTrue("Result not present", any);
     }
 
     public void testUpdateVersionTableToMigrationZero() throws Exception {
-        stmt.execute("CREATE TABLE " + VERSION_TABLE_NAME + " (release INTEGER NOT NULL, migration INTEGER NOT NULL)");
-        stmt.execute("INSERT INTO " + VERSION_TABLE_NAME + "(release, migration) VALUES (3, 7)");
+        stmt.execute("CREATE TABLE " + VERSION_TABLE_NAME + " (" + RELEASE_COLUMN_NAME + " INTEGER NOT NULL, " + MIGRATION_COLUMN_NAME + " INTEGER NOT NULL)");
+        stmt.execute("INSERT INTO " + VERSION_TABLE_NAME + "(" + RELEASE_COLUMN_NAME + ", " + MIGRATION_COLUMN_NAME + ") VALUES (3, 7)");
 
         adapter.updateVersion(3, 0);
-        ResultSet rs = stmt.executeQuery("SELECT release, migration FROM " + VERSION_TABLE_NAME + " WHERE release=3");
+        ResultSet rs = stmt.executeQuery("SELECT " + RELEASE_COLUMN_NAME + ", " + MIGRATION_COLUMN_NAME + " FROM " + VERSION_TABLE_NAME + " WHERE " + RELEASE_COLUMN_NAME + "=3");
         boolean any = false;
         while (rs.next()) {
             any = true;

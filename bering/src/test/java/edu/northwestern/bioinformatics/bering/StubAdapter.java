@@ -3,6 +3,7 @@ package edu.northwestern.bioinformatics.bering;
 import edu.northwestern.bioinformatics.bering.runtime.Version;
 
 import java.util.List;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * @author Rhett Sutphin
@@ -78,7 +79,11 @@ public class StubAdapter implements Adapter {
         throw new UnsupportedOperationException("updateVersion not implemented");
     }
 
-    public void insert(String tableName, List<String> columnNames, List<Object> values, boolean hasPrimaryKey) {
+	public JdbcTemplate getJdbcTemplate() {
+		throw new UnsupportedOperationException("getJdbcTemplate not implemented");
+	}
+
+	public void insert(String tableName, List<String> columnNames, List<Object> values, boolean hasPrimaryKey) {
         throw new UnsupportedOperationException("insert not implemented");
     }
 }

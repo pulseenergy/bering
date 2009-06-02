@@ -34,7 +34,7 @@ public abstract class HibernateBasedDialect extends AbstractDialect {
         return name.substring(0, name.length() - 7);
     }
 
-    private org.hibernate.dialect.Dialect getHibernateDialect() {
+    protected org.hibernate.dialect.Dialect getHibernateDialect() {
         return hibernateDialect;
     }
 
@@ -69,6 +69,10 @@ public abstract class HibernateBasedDialect extends AbstractDialect {
         }
 
         statement.append(')');
+        
+        if(table.getOptions() != null) {
+      	  statement.append(' ').append(table.getOptions());
+        }
         return Arrays.asList(statement.toString());
     }
 
@@ -108,7 +112,7 @@ public abstract class HibernateBasedDialect extends AbstractDialect {
         return SqlUtils.sqlLiteral(column.getDefaultValue());
     }
 
-    private String getAutoPkColumnString() {
+    protected String getAutoPkColumnString() {
         String typeName = new ColumnDeclaration(Column.AUTOMATIC_PK).getTypeName();
         StringBuilder sql = new StringBuilder();
         if (getHibernateDialect().supportsIdentityColumns()) {

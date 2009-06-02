@@ -1,18 +1,17 @@
 package edu.northwestern.bioinformatics.bering.runtime;
 
-import edu.northwestern.bioinformatics.bering.DatabaseAdapter;
-import edu.northwestern.bioinformatics.bering.Main;
-import edu.northwestern.bioinformatics.bering.BeringException;
-import edu.northwestern.bioinformatics.bering.MigrationExecutionException;
-import edu.northwestern.bioinformatics.bering.runtime.filesystem.FilesystemMigrationFinder;
-import edu.northwestern.bioinformatics.bering.dialect.Dialect;
-import edu.northwestern.bioinformatics.bering.dialect.DialectFactory;
-
 import java.beans.PropertyEditor;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.SQLException;
+
+import edu.northwestern.bioinformatics.bering.BeringException;
+import edu.northwestern.bioinformatics.bering.DatabaseAdapter;
+import edu.northwestern.bioinformatics.bering.Main;
+import edu.northwestern.bioinformatics.bering.MigrationExecutionException;
+import edu.northwestern.bioinformatics.bering.dialect.Dialect;
+import edu.northwestern.bioinformatics.bering.dialect.DialectFactory;
+import edu.northwestern.bioinformatics.bering.runtime.filesystem.FilesystemMigrationFinder;
 
 /**
  * @author Rhett Sutphin
@@ -20,13 +19,12 @@ import java.sql.SQLException;
 public class MigrateTaskHelper {
     private String migrationsDir;
     private String dialectName;
+	private String versionTable;
+	private Integer targetMigration;
+	private Integer targetRelease;
+	private HelperCallbacks callbacks;
 
-    private Integer targetMigration;
-    private Integer targetRelease;
-
-    private HelperCallbacks callbacks;
-
-    public MigrateTaskHelper(HelperCallbacks callbacks) {
+	public MigrateTaskHelper(HelperCallbacks callbacks) {
         this.callbacks = callbacks;
     }
 
@@ -54,7 +52,7 @@ public class MigrateTaskHelper {
     }
 
     private DatabaseAdapter createAdapter() {
-        return new DatabaseAdapter(callbacks.getConnection(), createDialect());
+        return new DatabaseAdapter(callbacks.getConnection(), createDialect(), versionTable);
     }
 
     // package-level for testing
@@ -117,7 +115,15 @@ public class MigrateTaskHelper {
         return targetRelease;
     }
 
-    public static interface HelperCallbacks {
+	public void setVersionTable(String versionTable) {
+		this.versionTable = versionTable;
+	}
+
+	public String getVersionTable() {
+		return versionTable;
+	}
+
+	public static interface HelperCallbacks {
         /** Return the connection that should be used during execution. */
         Connection getConnection();
 

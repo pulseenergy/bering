@@ -48,6 +48,8 @@ public class MigrateMojoTest extends TestCase {
         expectLastCall().anyTimes();
         helper.setTargetVersion(null);
         expectLastCall().anyTimes();
+        helper.setVersionTable(null);
+        expectLastCall().anyTimes();
     }
 
     public void testDataSourceProviderUsedIfSet() throws Exception {

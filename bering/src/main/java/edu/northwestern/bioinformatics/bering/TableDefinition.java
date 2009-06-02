@@ -14,6 +14,7 @@ public class TableDefinition {
     private String name;
     private List<Column> columns;
     private boolean includeDefaultPrimaryKey;
+    private String options;
 
     public TableDefinition(String name) {
         this.name = name;
@@ -64,4 +65,12 @@ public class TableDefinition {
         finalCols.addAll(columns);
         return Collections.unmodifiableList(finalCols);
     }
+
+	public String getOptions() {
+		return options;
+	}
+
+	public void setOptions(String options) {
+		this.options = options;
+	}
 }

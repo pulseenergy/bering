@@ -4,6 +4,8 @@ import edu.northwestern.bioinformatics.bering.runtime.Version;
 
 import java.util.List;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+
 /**
  * @author Moses Hohman
  * @author Rhett Sutphin
@@ -49,4 +51,6 @@ public interface Adapter {
      * @param migration
      */
     void updateVersion(Integer release, Integer migration);
+    
+    JdbcTemplate getJdbcTemplate();
 }

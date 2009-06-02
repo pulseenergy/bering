@@ -38,12 +38,13 @@ public abstract class Migration {
     static {
         NAMES_TO_JDBC_TYPES.put("string",    Types.VARCHAR);
         NAMES_TO_JDBC_TYPES.put("integer",   Types.INTEGER);
-        NAMES_TO_JDBC_TYPES.put("float",     Types.FLOAT);
+        NAMES_TO_JDBC_TYPES.put("float",     Types.FLOAT); 
         NAMES_TO_JDBC_TYPES.put("numeric",   Types.NUMERIC);
         NAMES_TO_JDBC_TYPES.put("boolean",   Types.BIT);
         NAMES_TO_JDBC_TYPES.put("date",      Types.DATE);
         NAMES_TO_JDBC_TYPES.put("time",      Types.TIME);
         NAMES_TO_JDBC_TYPES.put("timestamp", Types.TIMESTAMP);
+        NAMES_TO_JDBC_TYPES.put("bigint", 	Types.BIGINT);
     }
 
     protected Adapter adapter;
@@ -192,5 +193,9 @@ public abstract class Migration {
 
     public final void setSourceUri(URI sourceUri) {
         this.sourceUri = sourceUri;
+    }
+    
+	 public Adapter getAdapter() {
+        return adapter;
     }
 }
