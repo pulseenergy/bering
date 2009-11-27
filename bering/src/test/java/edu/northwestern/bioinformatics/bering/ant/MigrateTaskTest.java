@@ -10,26 +10,26 @@ import java.io.File;
  * @author Moses Hohman
  */
 public class MigrateTaskTest extends TestCase {
-    private static final File BASE_DIR = new File("/foo/bar");
+	private static final File BASE_DIR = new File(File.separator + "foo" + File.separator + "bar");
 
-    private MigrateTask task = new MigrateTask();
-    private Project project;
+	private MigrateTask task = new MigrateTask();
+	private Project project;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        project = createMock(Project.class);
-        task.setProject(project);
-        expect(project.getBaseDir()).andReturn(BASE_DIR).anyTimes();
-        replay(project);
-    }
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		project = createMock(Project.class);
+		task.setProject(project);
+		expect(project.getBaseDir()).andReturn(BASE_DIR).anyTimes();
+		replay(project);
+	}
 
-    public void testDefaultMigrationsDir() {
-        assertEquals("db/migrate", task.getMigrationsDir());
-    }
+	public void testDefaultMigrationsDir() {
+		assertEquals("db/migrate", task.getMigrationsDir());
+	}
 
-    public void testResolvedDefaultMigrationsDir() throws Exception {
-        File f = new File(task.getMigrationsDir());
-        assertEquals(BASE_DIR + "/db/migrate", task.createHelperCallbacks().resolve(f).getAbsolutePath());
-    }
+	public void testResolvedDefaultMigrationsDir() throws Exception {
+		File f = new File(task.getMigrationsDir());
+		assertEquals(BASE_DIR.getAbsolutePath() + File.separator + "db" + File.separator + "migrate", task.createHelperCallbacks().resolve(f).getAbsolutePath());
+	}
 }
