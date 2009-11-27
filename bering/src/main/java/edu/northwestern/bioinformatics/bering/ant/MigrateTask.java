@@ -19,7 +19,7 @@ public class MigrateTask extends JDBCTask {
         setMigrationsDir("db/migrate");
     }
 
-    // package-level for testing
+	// package-level for testing
     TaskHelperCallbacks createHelperCallbacks() {
         return new TaskHelperCallbacks();
     }
@@ -47,6 +47,14 @@ public class MigrateTask extends JDBCTask {
         getHelper().setMigrationsDir(migrationsDir);
     }
 
+    public String getVersionTable() {
+       return getHelper().getVersionTable();
+    }
+    
+    public void setVersionTable(String versionTable) {
+       getHelper().setVersionTable(versionTable);
+    }
+    
     public String getDialect() {
         return getHelper().getDialectName();
     }
