@@ -1,15 +1,11 @@
 package edu.northwestern.bioinformatics.bering.runtime.filesystem;
 
-import edu.northwestern.bioinformatics.bering.runtime.MigrationFinder;
-import edu.northwestern.bioinformatics.bering.runtime.Release;
-import edu.northwestern.bioinformatics.bering.runtime.AbstractMigrationFinder;
-
 import java.io.File;
 import java.io.FileFilter;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.Collection;
 import java.util.regex.Pattern;
+
+import edu.northwestern.bioinformatics.bering.runtime.AbstractMigrationFinder;
+import edu.northwestern.bioinformatics.bering.runtime.Release;
 
 /**
  * @author Rhett Sutphin
