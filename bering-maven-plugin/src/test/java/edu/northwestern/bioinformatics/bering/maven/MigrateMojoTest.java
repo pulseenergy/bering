@@ -5,8 +5,6 @@ import edu.northwestern.bioinformatics.bering.runtime.MigrateTaskHelper;
 import junit.framework.TestCase;
 import static org.easymock.classextension.EasyMock.*;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
-import org.springframework.jdbc.BadSqlGrammarException;
-import org.apache.maven.plugin.MojoExecutionException;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
@@ -197,5 +195,13 @@ public class MigrateMojoTest extends TestCase {
         public int getLoginTimeout() throws SQLException {
             throw new UnsupportedOperationException("getLoginTimeout not implemented");
         }
+
+		public boolean isWrapperFor(Class<?> iface) throws SQLException {
+			throw new UnsupportedOperationException("isWrapperFor not implemented");
+		}
+
+		public <T> T unwrap(Class<T> iface) throws SQLException {
+			throw new UnsupportedOperationException("unwrap not implemented");
+		}
     }
 }
