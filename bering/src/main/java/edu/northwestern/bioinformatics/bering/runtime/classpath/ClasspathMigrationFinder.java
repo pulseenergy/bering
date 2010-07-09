@@ -1,18 +1,16 @@
 package edu.northwestern.bioinformatics.bering.runtime.classpath;
 
+import java.io.IOException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
+
 import edu.northwestern.bioinformatics.bering.runtime.AbstractMigrationFinder;
 import edu.northwestern.bioinformatics.bering.runtime.MigrationLoadingException;
 import edu.northwestern.bioinformatics.bering.runtime.Release;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
-import org.springframework.core.io.Resource;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import java.io.IOException;
-import java.util.Map;
-import java.util.HashMap;
 
 /**
  * @author Rhett Sutphin
