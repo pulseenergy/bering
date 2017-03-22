@@ -3,11 +3,11 @@
     <artifactId>bering</artifactId>
     <packaging>jar</packaging>
     <name>Bering</name>
-    <version>0.71.1</version>
+    <version>0.71.2-SNAPSHOT</version>
     <parent>
         <artifactId>bering-all</artifactId>
         <groupId>edu.northwestern.bioinformatics</groupId>
-        <version>0.71.1</version>
+        <version>0.71.2-SNAPSHOT</version>
     </parent>
     <licenses>
         <license>
