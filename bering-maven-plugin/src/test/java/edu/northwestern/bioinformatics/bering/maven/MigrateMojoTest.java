@@ -10,7 +10,9 @@ import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * @author Rhett Sutphin
@@ -196,12 +198,16 @@ public class MigrateMojoTest extends TestCase {
             throw new UnsupportedOperationException("getLoginTimeout not implemented");
         }
 
-		public boolean isWrapperFor(Class<?> iface) throws SQLException {
-			throw new UnsupportedOperationException("isWrapperFor not implemented");
-		}
+        public Logger getParentLogger() {
+            throw new UnsupportedOperationException("getParentLogger not implemented");
+        }
 
-		public <T> T unwrap(Class<T> iface) throws SQLException {
-			throw new UnsupportedOperationException("unwrap not implemented");
-		}
+        public boolean isWrapperFor(Class<?> iface) throws SQLException {
+            throw new UnsupportedOperationException("isWrapperFor not implemented");
+        }
+
+        public <T> T unwrap(Class<T> iface) throws SQLException {
+            throw new UnsupportedOperationException("unwrap not implemented");
+        }
     }
 }

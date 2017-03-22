@@ -15,11 +15,6 @@
             <url>http://www.gnu.org/licenses/lgpl.txt</url>
         </license>
     </licenses>
-    <scm>
-        <url>http://bering.googlecode.com/svn/</url>
-        <connection>scm:svn:http://bering.googlecode.com/svn/trunk/bering</connection>
-        <developerConnection>scm:svn:https://bering.googlecode.com/svn/trunk/bering</developerConnection>
-    </scm>
     <dependencies>
         <dependency>
             <groupId>commons-logging</groupId>
@@ -130,35 +125,5 @@
             </plugin>
         </plugins>
     </build>
-    
-    <distributionManagement>
-		<repository>
-			<uniqueVersion>false</uniqueVersion>
-			<id>external_free</id>
-			<name>Intranet Maven 2 Repository - External Free libraries</name>
-			<url>scp://192.168.0.252/opt/lampp/htdocs/maven2_repositories/external_free</url>
-			<layout>default</layout>
-		</repository>
-	</distributionManagement>
-
-	<profiles>
-		<profile>
-			<id>windows</id>
-			<activation>
-				<os>
-					<family>windows</family>
-				</os>
-			</activation>
-			<distributionManagement>
-				<repository>
-					<uniqueVersion>false</uniqueVersion>
-					<id>external_free</id>
-					<name>Intranet Maven 2 Repository - External Free libraries</name>
-					<url>scpexe://192.168.0.252/opt/lampp/htdocs/maven2_repositories/external_free</url>
-					<layout>default</layout>
-				</repository>
-			</distributionManagement>
-		</profile>
-	</profiles>
 
 </project>

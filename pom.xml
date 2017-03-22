@@ -19,13 +19,9 @@
 		</license>
 	</licenses>
 	<scm>
-		<url>http://bering.googlecode.com/svn/</url>
-		<connection>
-			scm:svn:http://bering.googlecode.com/svn/trunk/
-		</connection>
-		<developerConnection>
-			scm:svn:https://bering.googlecode.com/svn/trunk/
-		</developerConnection>
+		<connection>scm:git:ssh://git@github.com/pulseenergy/bering.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/pulseenergy/bering.git</developerConnection>
+		<tag>HEAD</tag>
 	</scm>
 	<modules>
 		<module>bering</module>
@@ -36,19 +32,12 @@
 	</properties>
 	<distributionManagement>
 		<repository>
-			<id>inhouse</id>
-			<name>Inhouse Internal Release Repository</name>
-			<url>
-				scp://192.168.0.252:10000/opt/lampp/htdocs/maven2_repositories/inhouse
-			</url>
+			<id>nexus</id>
+			<url>https://nexus.pulseenergy.com/nexus/content/repositories/releases</url>
 		</repository>
 		<snapshotRepository>
-			<id>inhouse_snapshot</id>
-			<name>Inhouse Internal Snapshot Repository</name>
-			<url>
-				scp://192.168.0.252:10000/opt/lampp/htdocs/maven2_repositories/inhouse_snapshot
-			</url>
-			<uniqueVersion>true</uniqueVersion>
+			<id>nexus</id>
+			<url>https://nexus.pulseenergy.com/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<build>
