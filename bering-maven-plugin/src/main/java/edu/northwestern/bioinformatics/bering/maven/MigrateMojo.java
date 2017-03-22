@@ -97,7 +97,9 @@ public class MigrateMojo extends AbstractBeringMojo {
         if (dataSourceProvider != null) {
             return getDataSourceFromProvider();
         } else {
-            return new SingleConnectionDataSource(driver, url, username, password, true);
+            SingleConnectionDataSource dataSource = new SingleConnectionDataSource(driver, url, username, password, true);
+            dataSource.setAutoCommit(false);
+            return dataSource;
         }
     }
 
