@@ -5,7 +5,7 @@
 	<groupId>edu.northwestern.bioinformatics</groupId>
 	<artifactId>bering-all</artifactId>
 	<packaging>pom</packaging>
-	<version>0.71-SNAPSHOTJMG</version>
+	<version>0.71.1-SNAPSHOT</version>
 	<name>Bering (with submodules)</name>
 	<url>http://code.google.com/p/bering/</url>
 	<description>
