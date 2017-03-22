@@ -3,7 +3,7 @@
 	<groupId>edu.northwestern.bioinformatics</groupId>
 	<artifactId>bering-all</artifactId>
 	<packaging>pom</packaging>
-	<version>0.71.2-SNAPSHOT</version>
+	<version>0.71.2</version>
 	<name>Bering (with submodules)</name>
 	<url>http://code.google.com/p/bering/</url>
 	<description>
@@ -19,7 +19,7 @@
 	<scm>
 		<connection>scm:git:ssh://git@github.com/pulseenergy/bering.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/pulseenergy/bering.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>0.71.2</tag>
 	</scm>
 	<modules>
 		<module>bering</module>
