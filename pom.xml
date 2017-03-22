@@ -31,11 +31,11 @@
 	<distributionManagement>
 		<repository>
 			<id>nexus</id>
-			<url>https://nexus.pulseenergy.com/nexus/content/repositories/releases</url>
+			<url>https://nexus.pulseenergy.com/nexus/content/repositories/inhouse-forked</url>
 		</repository>
 		<snapshotRepository>
 			<id>nexus</id>
-			<url>https://nexus.pulseenergy.com/nexus/content/repositories/snapshots</url>
+			<url>https://nexus.pulseenergy.com/nexus/content/repositories/inhouse-forked-snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 	<build>
